@@ -12,7 +12,6 @@ use std::ffi::{
     CStr,
 };
 
-use std::str::Utf8Error;
 use std::time::Duration;
 use std::ops::Drop;
 
@@ -42,7 +41,7 @@ impl Client {
         }
     }
 
-    pub fn execute<'a>(&'a mut self, request: &str) -> Result<Option<&'a str>, Utf8Error> {
+    pub fn execute<'a>(&'a mut self, request: &str) -> Option<&'a str> {
         let crequest = CString::new(request).expect("null character in request string");
         unsafe {
             let answer = td_json_client_execute(
@@ -52,10 +51,10 @@ impl Client {
 
             let answer = answer as *const c_char;
             if answer == std::ptr::null() {
-                return Ok(None);
+                return None;
             }
             let answer = CStr::from_ptr(answer);
-            answer.to_str().map(|s| Some(s))
+            Some(answer.to_str().expect("tdlib sent invalid utf-8 string"))
         }
     }
 
@@ -69,7 +68,7 @@ impl Client {
         }
     }
 
-    pub fn receive<'a>(&'a mut self, timeout: Duration) -> Result<Option<&'a str>, Utf8Error> {
+    pub fn receive<'a>(&'a mut self, timeout: Duration) -> Option<&'a str> {
         let timeout = timeout.as_secs() as f64;
 
         unsafe {
@@ -80,11 +79,11 @@ impl Client {
 
             let answer = answer as *const c_char;
             if answer == std::ptr::null() {
-                return Ok(None);
+                return None;
             }
             let answer = CStr::from_ptr(answer);
 
-            answer.to_str().map(|s| Some(s))
+            Some(answer.to_str().expect("tdlib sent invalid utf-8 string"))
         }
     }
 }
