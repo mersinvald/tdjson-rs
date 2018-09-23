@@ -15,6 +15,19 @@ use std::ffi::{
 use std::time::Duration;
 use std::ops::Drop;
 
+pub fn set_log_file(path: &str) -> Result<i32, std::ffi::NulError> {
+    let cpath = CString::new(path)?;
+    unsafe {
+        Ok(td_set_log_file_path(cpath.as_ptr()))
+    }
+}
+
+pub fn set_log_verbosity_level(level : i32) {
+    unsafe {
+        td_set_log_verbosity_level(level);
+    }
+}
+
 pub struct Client {
     client_ptr: *mut c_void
 }
