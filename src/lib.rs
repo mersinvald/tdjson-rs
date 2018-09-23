@@ -58,7 +58,7 @@ impl Client {
         }
     }
 
-    pub fn send(&mut self, request: &str) {
+    pub fn send(&self, request: &str) {
         let crequest = CString::new(request).expect("null character in request string");
         unsafe {
             td_json_client_send(
