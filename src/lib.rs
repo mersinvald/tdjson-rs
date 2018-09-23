@@ -136,6 +136,7 @@ impl Client {
     }
 }
 
+#[derive(Clone)]
 pub struct SendClient {
     inner: Arc<UnsafeClient>,
 }
