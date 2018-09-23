@@ -9,9 +9,10 @@ use std::os::raw::{
 
 use std::ffi::{
     CString,
-    IntoStringError,
+    CStr,
 };
 
+use std::str::Utf8Error;
 use std::time::Duration;
 use std::ops::Drop;
 
@@ -41,29 +42,34 @@ impl Client {
         }
     }
 
-    pub fn execute(&mut self, request: &str) -> Result<String, IntoStringError> {
+    pub fn execute<'a>(&'a mut self, request: &str) -> Result<Option<&'a str>, Utf8Error> {
+        let crequest = CString::new(request).expect("null character in request string");
         unsafe {
             let answer = td_json_client_execute(
                 self.client_ptr,
-                request.as_ptr() as *const c_char
+                crequest.as_ptr() as *const c_char
             );
 
-            let answer = answer as *mut c_char;
-
-            CString::from_raw(answer).into_string()
+            let answer = answer as *const c_char;
+            if answer == std::ptr::null() {
+                return Ok(None);
+            }
+            let answer = CStr::from_ptr(answer);
+            answer.to_str().map(|s| Some(s))
         }
     }
 
     pub fn send(&mut self, request: &str) {
+        let crequest = CString::new(request).expect("null character in request string");
         unsafe {
             td_json_client_send(
                 self.client_ptr,
-                request.as_ptr() as *const c_char
+                crequest.as_ptr() as *const c_char
             )
         }
     }
 
-    pub fn receive(&mut self, timeout: Duration) -> Result<String, IntoStringError> {
+    pub fn receive<'a>(&'a mut self, timeout: Duration) -> Result<Option<&'a str>, Utf8Error> {
         let timeout = timeout.as_secs() as f64;
 
         unsafe {
@@ -72,9 +78,13 @@ impl Client {
                 timeout
             );
 
-            let answer = answer as *mut c_char;
+            let answer = answer as *const c_char;
+            if answer == std::ptr::null() {
+                return Ok(None);
+            }
+            let answer = CStr::from_ptr(answer);
 
-            CString::from_raw(answer).into_string()
+            answer.to_str().map(|s| Some(s))
         }
     }
 }
