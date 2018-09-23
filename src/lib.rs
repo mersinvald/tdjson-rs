@@ -150,13 +150,6 @@ unsafe impl Send for SendClient{}
 unsafe impl Sync for SendClient{}
 
 impl SendClient {
-    pub fn execute<'a>(&'a mut self, request: &str) -> Option<&'a str> {
-        // SAFE because we are taking self by mutable referene
-        unsafe {
-            self.inner.execute(request)
-        }
-    }
-
     pub fn send(&self, request: &str) {
         self.inner.send(request);
     }
