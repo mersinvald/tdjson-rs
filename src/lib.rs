@@ -144,7 +144,7 @@ pub struct ReceiveClient {
     inner: Arc<UnsafeClient>,
 }
 
-/// SAFE because the send method can be called by any threads
+/// SAFE because the send method can be called by any thread
 unsafe impl Send for SendClient{}
 /// SAFE because the send method can be called by multiple threads at the same time
 unsafe impl Sync for SendClient{}
@@ -155,7 +155,7 @@ impl SendClient {
     }
 }
 
-/// SAFE because the send method can be called by any threads
+/// SAFE because the receive method can be called by any thread
 unsafe impl Send for ReceiveClient{}
 impl ReceiveClient {
     pub fn receive<'a>(&'a mut self, timeout: Duration) -> Option<&'a str> {
