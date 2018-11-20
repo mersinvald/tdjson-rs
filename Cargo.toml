@@ -9,4 +9,4 @@ license = "MIT"
 keywords = ["telegram", "tdlib", "bindings"]
 
 [dependencies]
-tdjson-sys = "0.1"
+tdjson-sys = "0.1.3"
