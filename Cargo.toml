@@ -1,6 +1,6 @@
 [package]
 name = "tdjson"
-version = "0.1.2"
+version = "0.2.0"
 authors = ["Mike Lubinets <lubinetsm@yandex.ru>"]
 description = "TDLIB Json Client for Rust"
 documentation = "https://docs.rs/crate/tdjson"
