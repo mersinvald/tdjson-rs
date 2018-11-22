@@ -8,7 +8,7 @@ Please follow the steps described in the [tdlib-sys](https://github.com/mersinva
 
 Add `tdjson` to your `Cargo.toml` dependency list
 ```toml
-tdjson = "0.1"
+tdjson = "0.2"
 ```
 
 And let the Cargo do it's magic!
