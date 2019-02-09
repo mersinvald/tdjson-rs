@@ -1,6 +1,6 @@
 [package]
 name = "tdjson"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["Mike Lubinets <lubinetsm@yandex.ru>"]
 description = "TDLIB Json Client for Rust"
 documentation = "https://docs.rs/crate/tdjson"
@@ -9,4 +9,4 @@ license = "MIT"
 keywords = ["telegram", "tdlib", "bindings"]
 
 [dependencies]
-tdjson-sys = "0.1.4"
+tdjson-sys = { version = "0.1.5" }
